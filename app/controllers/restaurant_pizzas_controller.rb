@@ -1,14 +1,14 @@
 class RestaurantPizzasController < ApplicationController
-
+    skip_before_action :verify_authenticity_token
+    
     def create
-        restaurantpizza = RestaurantPizza.create!(restaurantpizza_params)
-        render json: restaurantpizza, status: :created
+        restaurant_pizzas = RestaurantPizza.create!(valid_params)
+        render json: restaurant_pizzas, except: [:created_at, :updated_at], status: :created
     end
     
     private
-    
-    def restaurantpizza_params
-        params.require(:restaurant_pizza).permit(:price, :pizza_id, :restaurant_id)
+    def valid_params
+        params.require(:restaurant_pizza).permit(:restaurant_id, :pizza_id, :price)
     end
-
+      
 end
